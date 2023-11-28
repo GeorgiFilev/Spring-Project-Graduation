@@ -20,12 +20,16 @@ import java.util.List;
 public class StudentEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
     private String fNumber;
+
+    @OneToOne
+    private User user;
+
 
     @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("student")
