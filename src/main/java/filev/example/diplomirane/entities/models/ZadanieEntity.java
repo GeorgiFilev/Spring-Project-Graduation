@@ -28,6 +28,8 @@ public class ZadanieEntity {
 
     private String technologii;
 
+    private String odobreno ;
+
     @ManyToOne
     @JoinColumn(name = "student_id")
     private StudentEntity student;

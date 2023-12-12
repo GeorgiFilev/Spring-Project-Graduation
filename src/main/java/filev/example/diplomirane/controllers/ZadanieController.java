@@ -41,6 +41,17 @@ public class ZadanieController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping(path = "/zadanies/odobreno/{odobreno}")
+    public List<ZadanieDto> ListZadanies(@PathVariable("odobreno") String odobreno){
+        List<ZadanieEntity> zadanies = zadanieService.findByOdobreno(odobreno);
+        return  zadanies.stream()
+                .map(zadanie -> {
+                    return zadanieMapper.mapTo(zadanie);
+                })
+                .collect(Collectors.toList());
+    }
+
+
     @GetMapping(path = "/zadanies/{id}")
     public ResponseEntity<ZadanieDto> getAuthor(@PathVariable("id") Long id){
         Optional<ZadanieEntity> foundZadanie = zadanieService.findOne(id);

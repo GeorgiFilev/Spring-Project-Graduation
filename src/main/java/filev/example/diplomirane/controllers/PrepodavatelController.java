@@ -26,6 +26,7 @@ public class PrepodavatelController {
 
     @PostMapping(path = "/prepodavatels")
     public ResponseEntity<PrepodavatelDto> createPrepodavatel(@RequestBody PrepodavatelDto prepodavatel){
+        System.out.println("Reached createPrepodavatel endpoint");
         PrepodavatelEntity prepodavatelEntity = prepodavatelMapper.mapFrom(prepodavatel);
         PrepodavatelEntity savedPrepodavatelEntity = prepodavatelService.save(prepodavatelEntity);
 

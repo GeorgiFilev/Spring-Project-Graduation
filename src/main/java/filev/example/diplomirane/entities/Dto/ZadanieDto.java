@@ -25,6 +25,7 @@ public class ZadanieDto {
     private String zadachi;
 
     private String technologii;
+    private String odobreno ;
 
 
     private StudentEntity student;

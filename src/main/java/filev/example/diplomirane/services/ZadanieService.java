@@ -15,4 +15,6 @@ public interface ZadanieService {
     Optional<ZadanieEntity> findOne(Long id);
 
     void delete(Long id);
+
+    List<ZadanieEntity> findByOdobreno(String odobreno);
 }

@@ -22,6 +22,8 @@ public class ZadanieServiceImpl  implements ZadanieService {
 
     @Override
     public ZadanieEntity save(ZadanieEntity zadanieEntity) {
+        // задаваме дефолтно не одобрено задание
+        zadanieEntity.setOdobreno("no");
         return this.zadanieRepository.save(zadanieEntity);
     }
 
@@ -41,6 +43,14 @@ public class ZadanieServiceImpl  implements ZadanieService {
     @Override
     public void delete(Long id) {
         zadanieRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ZadanieEntity> findByOdobreno(String odobreno) {
+        return StreamSupport.stream(zadanieRepository
+                        .findByOdobreno(odobreno)
+                        .spliterator(),false)
+                .collect(Collectors.toList());
     }
 
 }

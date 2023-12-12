@@ -7,6 +7,7 @@ import filev.example.diplomirane.entities.Dto.StudentDto;
 import filev.example.diplomirane.entities.models.StudentEntity;
 
 import filev.example.diplomirane.services.StudentService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -30,6 +33,16 @@ public class StudentControllerIntegrationTests {
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
+
+    // trqbwashe da dobawq towa otdolu s webApplicationContext
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+    @BeforeEach()
+    public void setup()
+    {
+        //Init MockMvc Object and build
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 
     @Autowired
     public StudentControllerIntegrationTests(MockMvc mockMvc, StudentService studentService, ObjectMapper objectMapper) {
@@ -54,6 +67,7 @@ public class StudentControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "emilia" , authorities = {"Prepodavatel", "Student" })
     public void testThatListStudentsReturnsHttpStatus200() throws Exception{
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/students")
@@ -62,6 +76,7 @@ public class StudentControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "emilia" , authorities = {"Prepodavatel", "Student" })
     public void testThatListStudentsReturnsListStudents() throws Exception{
         StudentEntity studentEntity = TestDataUtil.createStudentA();
         studentEntity.setId(null); //just testing
@@ -78,6 +93,7 @@ public class StudentControllerIntegrationTests {
 
 
     @Test
+    @WithMockUser(username = "emilia" , authorities = {"Prepodavatel", "Student" })
     public void testThatListStudentsReturnsHttpStatus200WhenStudentExists() throws Exception {
         StudentEntity studentEntity = TestDataUtil.createStudentA();
 
@@ -92,6 +108,7 @@ public class StudentControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "emilia" , authorities = {"Prepodavatel", "Student" })
     public void testThatFullUpdateStudentReturnsHttpStatusOf200WhenStudentExists() throws Exception {
 
         StudentEntity studentEntity = TestDataUtil.createStudentA();
@@ -109,6 +126,7 @@ public class StudentControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "emilia" , authorities = {"Prepodavatel", "Student" })
     public void testThatDeleteStudentReturnsHttpStatus204ForNonExistingStudent() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/students/" + 99)
@@ -118,6 +136,7 @@ public class StudentControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "emilia" , authorities = {"Prepodavatel", "Student" })
     public void testThatDeleteStudentReturnsHttpStatus204ForExistingStudent() throws Exception {
 
         StudentEntity studentEntity = TestDataUtil.createStudentA();
@@ -131,6 +150,7 @@ public class StudentControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "emilia" , authorities = {"Prepodavatel", "Student" })
     public void testThatGetStudentsWhereNameLikeParamReturnsHttpStatus200() throws Exception {
         StudentEntity studentEntity = TestDataUtil.createStudentA();
         StudentEntity savedStudentA = studentService.save(studentEntity);
@@ -142,6 +162,7 @@ public class StudentControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "emilia" , authorities = {"Prepodavatel", "Student" })
     public void testThatGetStudentsWhereFnumberLikeParamReturnsHttpStatus200() throws Exception {
         StudentEntity studentEntity = TestDataUtil.createStudentA();
         StudentEntity savedStudentA = studentService.save(studentEntity);

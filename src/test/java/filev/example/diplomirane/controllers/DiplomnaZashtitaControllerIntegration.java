@@ -2,7 +2,11 @@ package filev.example.diplomirane.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import filev.example.diplomirane.TestDataUtil;
+import filev.example.diplomirane.entities.models.DiplomnaZashtitaEntity;
+import filev.example.diplomirane.entities.models.ZadanieEntity;
 import filev.example.diplomirane.services.DiplomnaZashtitaService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -25,6 +31,15 @@ public class DiplomnaZashtitaControllerIntegration {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private WebApplicationContext webApplicationContext;
+    @BeforeEach()
+    public void setup()
+    {
+        //Init MockMvc Object and build
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @Autowired
     public DiplomnaZashtitaControllerIntegration(DiplomnaZashtitaService diplomnaZashtitaService, MockMvc mockMvc, ObjectMapper objectMapper) {
         this.diplomnaZashtitaService = diplomnaZashtitaService;
         this.mockMvc = mockMvc;
@@ -32,7 +47,21 @@ public class DiplomnaZashtitaControllerIntegration {
     }
 
     @Test
-    public void testThatDeleteDiplomnaZashtitaReturnsHttpStatus204ForNonExistingAuthor() throws Exception {
+    public void testThatCreateDiplomnaZashtitaSuccessfullyReturnsHttp201Created() throws Exception {
+        DiplomnaZashtitaEntity diplomnaZashtita = TestDataUtil.createDiplomnaZashtitaA();
+        diplomnaZashtita.setId(2L);
+        String diplomnaZashtitaJson = objectMapper.writeValueAsString(diplomnaZashtita);
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/diplomnaZashtitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(diplomnaZashtitaJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isCreated()
+        );
+    }
+
+    @Test
+    public void testThatDeleteDiplomnaZashtitaReturnsHttpStatus204ForNonExistingDiplomnaZashtita() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/diplomnaZashtitas/" + 99)
                         .contentType(MediaType.APPLICATION_JSON)

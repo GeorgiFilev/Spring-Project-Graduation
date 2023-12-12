@@ -32,8 +32,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests
                         (authz -> authz
-                                .requestMatchers( "/prepodavatels/**").hasAuthority("Prepodavatel")
-                                .requestMatchers("/students/**").hasAuthority("Student")
+                                .requestMatchers("/prepodavatels/**").hasAuthority("Prepodavatel")
+                                .requestMatchers( "/diplomnaZashtitas/**").hasAuthority("Prepodavatel")
+                                .requestMatchers( "/zadanies/**").hasAuthority("Prepodavatel")
+                                .requestMatchers("/students/**").hasAuthority("Prepodavatel")
+                                .requestMatchers("/students/*").hasAuthority("Student")
+                                .requestMatchers(HttpMethod.POST, "/students").hasAuthority("Student")
+
                                 .anyRequest().authenticated()
                         )
                 .oauth2ResourceServer(oauth2 -> oauth2
